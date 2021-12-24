@@ -5,8 +5,11 @@ var fs= require('fs');
 var {MongoClient} = require('mongodb');
 var uri = 'mongodb+srv://admin:admin@cluster0.mxtmt.mongodb.net/cluster0?retryWrites=true&w=majority';
 var mongoClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
+const session=require("express-session");
+app.use(session({secret:'secret'}));
 var alert = require('alert');
+const { Script } = require('vm');
+
 
 
 // view engine setup
@@ -18,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
+var userSession;
 
 //// login bage
 
@@ -57,7 +60,69 @@ async function FindUser(User){
    }
 }
 
+async function FindUser1(User){
+    try{
+    await mongoClient.connect();
+    let Users = mongoClient.db('Project_dp').collection('Users');
+        try{
+            return await Users.findOne(User);
+            
+        }
+        catch(e){
+            console.log('error in find User');
+            return null;
+        }
+   }
+   catch(e){
+       console.log("error in the Connection of FindUser");
+       return null;
+   }
+}
+
+async function FindUserByUsername(username){
+    try{
+    await mongoClient.connect();
+    let Users = mongoClient.db('Project_dp').collection('Users');
+        try{
+            return await Users.findOne({'UserName':username});
+            
+        }
+        catch(e){
+            console.log('error in find User');
+            return null;
+        }
+   }
+   catch(e){
+       console.log("error in the Connection of FindUser");
+       return null;
+   }
+}
+
+
+async function updateByUsername(mongoClient,userName,updatedListing){
+await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userName},{$set: updatedListing});
+}
+
+
+async function addToCart(User,product){
+    await mongoClient.connect();
+    let Users = mongoClient.db('Project_dp').collection('Users');
+    let foundUser=await FindUser1(User);
+    let userCart=foundUser.cart;
+    userCart.push(product);
+    console.log(userCart);
+    try {
+        updateByUsername(mongoClient,User.UserName,{'cart':userCart})
+    }
+    catch(e){
+        console.error(e);
+    }
+
+
+}
+
 app.post('/login',async function(req,res){
+    userSession=req.session;
     let UserName = req.body.username;
     let Password = req.body.password;
     let User ={'UserName':UserName,'Password':Password}; 
@@ -66,8 +131,14 @@ app.post('/login',async function(req,res){
         alert("your userName or password is not correct");
         res.render('login',{title:'Login'});
     }
-    else
+    else{
+        userSession.username=UserName;
+        userSession.pass=Password;
         res.redirect('home');
+
+    }
+         
+
 });
 
 
@@ -75,7 +146,8 @@ app.post('/login',async function(req,res){
 app.post('/register',async function(req,res){
     let UserName = req.body.username;
     let Password = req.body.password;
-    let User ={'UserName':UserName,'Password':Password}; 
+    let cart=new Array;
+    let User ={'UserName':UserName,'Password':Password, 'cart':cart}; 
     let testUsed = {'UserName':UserName};
     let ret =await FindUser(testUsed);
     if(ret!= null && ret.length == 0){
@@ -105,8 +177,15 @@ app.get('/boxing',function(req, res){
 });
 
 
-app.get('/cart',function(req, res){
-    res.render('cart');
+app.get('/cart',async function(req, res){
+    userSession=req.session;
+    let foundUser=await FindUserByUsername(userSession.username);
+    let userCart=foundUser.cart;
+    console.log(userCart);
+        
+ 
+ 
+    res.render('cart',{myCart:userCart});
 });
 
 
@@ -116,6 +195,7 @@ app.get('/galaxy',function(req, res){
 
 app.get('/home',function(req, res){
     res.render('home');
+    console.log(userSession.username);
     });
 
 
@@ -159,6 +239,58 @@ app.get('/sun',function(req, res){
 app.get('/tennis',function(req, res){
     res.render('tennis');
     });
+
+
+app.post("/cartIphone",function(req,res){
+userSession=req.session;
+let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
+addToCart(loggedUser,"iphone");
+
+});
+
+app.post("/cartGalaxy",function(req,res){
+    userSession=req.session;
+    let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
+    addToCart(loggedUser,"galaxy");
+    
+    });
+
+app.post("/cartSun",function(req,res){
+    userSession=req.session;
+    let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
+    addToCart(loggedUser,"sun");
+        
+    });
+
+app.post("/cartTennis",function(req,res){
+    userSession=req.session;
+    let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
+    addToCart(loggedUser,"tennis");
+            
+});
+            
+            
+
+app.post("/cartLeaves",function(req,res){
+    userSession=req.session;
+    let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
+    addToCart(loggedUser,"leaves");
+                
+});
+
+
+
+
+app.post("/cartBoxing",function(req,res){
+    userSession=req.session;
+    let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
+    addToCart(loggedUser,"boxing");
+                    
+});
+
+
+
+
 
 
 app.listen(3000);

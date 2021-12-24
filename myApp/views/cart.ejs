@@ -4,7 +4,7 @@
     <style>
         body {
             background-image: url("background3.jpg");
-            background-repeat: no-repeat;
+            background-repeat: repeat-y;
             background-size: 100%;
         }
 
@@ -13,7 +13,25 @@
             text-align: center;
             -webkit-text-stroke: 1px blue;
         }
+        .container1{
+            position: relative;
+            align-items: center;
+            justify-content: center;
+        }
+        .container2{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            justify-content: space-evenly;
+            margin-top: 100px;
+        }
+        .btn{
+            position: relative;
+            
+        }
     </style>
+
+    <script src="/myApp/app.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -38,5 +56,19 @@
             </form>
         </div>
     </nav>
+    <% var i=0 %>
+   <% myCart.forEach(function(Product){ %>  
+    
+    <div class="container1">
+
+        <img id="image" src=<%=("/"+ Product +".jpg")%> width="193" height="300"  >
+        <br>
+        <button onclick="location.href = '<%='/' + Product%>';" id="galaxy" class="btn btn-secondary ml-3"> View </button>
+    </div>
+
+    
+    <% i+=250; %>
+    <% }); %>
+    
 </body>
 </html>

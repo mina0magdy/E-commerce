@@ -78,8 +78,9 @@
         A poetry collection by American poet Walt Whitman (1819–1892), each poem of which is loosely connected and represents the celebration of his philosophy of life and humanity.
     </div>
     <div class="cart">
-        <button id="cart" class="btn btn-secondary ml-3">Add to Cart</button>
-    </div>
+        <form method="post" action='/cartLeaves' class="form-inline my-2 my-lg-0">
+            <button id="cart" class="btn btn-secondary ml-3" type="submit">Add to Cart</button>
+        </form>    </div>
     <div class="video">
         <video width="480" height="360" controls>
             <source src="/leaves.mp4">
