@@ -35,6 +35,9 @@ async function addUser(User){
         }catch(e){
            console.log('error in the insert the User');
         }
+        finally{
+            await mongoClient.close();
+        }
     }
     catch(e){
         console.log("error is happened");
@@ -52,6 +55,9 @@ async function FindUser(User){
         catch(e){
             console.log('error in find User');
             return null;
+        }
+        finally{
+            await mongoClient.close();
         }
    }
    catch(e){
@@ -71,6 +77,8 @@ async function FindUser1(User){
         catch(e){
             console.log('error in find User');
             return null;
+        }finally{
+            await mongoClient.close();
         }
    }
    catch(e){
@@ -91,9 +99,56 @@ async function FindUserByUsername(username){
             console.log('error in find User');
             return null;
         }
+        finally{
+            await mongoClient.close();
+        }
    }
    catch(e){
        console.log("error in the Connection of FindUser");
+       return null;
+   }
+}
+
+/// add Items
+async function addItems(){
+    try{
+        await mongoClient.connect();
+        let Items = mongoClient.db('Project_dp').collection('Items');
+        try{
+           await Items.insertMany([{name:'Boxing Bag',url:'/boxing'},{name:'Tennis Racket',url:'/tennis'},{name:'Leaves of Grass',url:'/leaves'},{name:'The Sun and Her Flowers',url:'/sun'},{name:'Galaxy S21 Ultra',url:'/galaxy'},{name:'iPhone 13 Pro',url:'/iphone'}]);
+           await Items.createIndex({name:'text'});
+        }catch(e){
+           console.log('error in the insert the Items');
+        }
+        finally{
+            await mongoClient.close();
+        }
+    }
+    catch(e){
+        console.log("error is happened");
+    }
+}
+//// first call the function addItem and we let it be called only once then we comment it;
+//addItems();
+
+async function FindItem(Item){
+    try{
+    await mongoClient.connect();
+    let Items = mongoClient.db('Project_dp').collection('Items');
+        try{
+            let ret=await Items.find( { $text: { $search: Item } } ).toArray();
+            return ret;
+        }
+        catch(e){
+            console.log('error in find Item');
+            return null;
+        }
+        finally{
+            await mongoClient.close();
+        }
+   }
+   catch(e){
+       console.log("error in the Connection of FindItem");
        return null;
    }
 }
@@ -222,8 +277,13 @@ app.get('/registration',function(req, res){
     });
 
 
-app.get('/searchresults',function(req, res){
-    res.render('searchresults');
+    pp.post('/search',async function(req,res){
+        var x=await FindItem(req.body.Search);
+        if(x==null){
+            alert("You don't have a connection");
+        }
+        else 
+        res.render('searchresults',{list:x});
     });
 
 
