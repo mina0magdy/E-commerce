@@ -14,20 +14,20 @@
             -webkit-text-stroke: 1px blue;
         }
         .container1{
-            position: relative;
-            align-items: center;
-            justify-content: center;
+            display: inline-block;
+            position: -ms-page;
+            margin-left: 50px;
         }
-        .container2{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            justify-content: space-evenly;
-            margin-top: 100px;
-        }
-        .btn{
+        
+        .btn {
             position: relative;
-            
+            margin-top: 25px;
+            margin-left: 150px;
+            color: blue;
+        }
+        #galaxy {
+            position: relative;
+            left: 50px;
         }
     </style>
 
@@ -59,7 +59,7 @@
     <% var i=0 %>
    <% myCart.forEach(function(Product){ %>  
     
-    <div class="container1">
+    <div class="container1" >
 
         <img id="image" src=<%=("/"+ Product +".jpg")%> width="193" height="300"  >
         <br>
