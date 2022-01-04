@@ -183,7 +183,7 @@ async function addToCart(User,product){
 }
 
 app.post('/login',async function(req,res){
-    userSession=req.session;
+    //userSession=req.session;
     isSinged=false;
     let UserName = req.body.username;
     let Password = req.body.password;
