@@ -10,7 +10,7 @@ app.use(session({secret:'secret'}));
 var alert = require('alert');
 const { Script } = require('vm');
 const { Console } = require('console');
-var isSinged = false;
+var isSinged;
 
 
 // view engine setup
@@ -179,7 +179,7 @@ async function addToCart(User,product){
 
 app.post('/login',async function(req,res){
     userSession=req.session;
-    
+    isSinged=false;
     let UserName = req.body.username;
     let Password = req.body.password;
     if(UserName == null || UserName == ""||Password == null || Password == ""){
@@ -219,7 +219,7 @@ app.post('/register',async function(req,res){
     if(ret!= null && ret.length == 0){
         addUser(User);
         alert("Registeration is completed");
-        res.redirect('login');  
+        res.redirect('home');  
     }
     else {
         alert("The UserName is already exist");
