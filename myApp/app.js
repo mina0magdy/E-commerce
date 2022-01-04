@@ -184,7 +184,7 @@ async function addToCart(User,product){
 
 app.post('/login',async function(req,res){
     //userSession=req.session;
-    isSinged=false;
+    //isSinged=false;
     let UserName = req.body.username;
     let Password = req.body.password;
     if(UserName == null || UserName == ""||Password == null || Password == ""){
@@ -244,6 +244,7 @@ app.post('/register',async function(req,res){
 
 app.get('/',function(req, res){
    userSession=undefined;
+   isSinged = false;
    res.render('login', {title: "Login"});
 });
 
