@@ -419,7 +419,7 @@ app.post("/cartGalaxy",function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
     addToCart(loggedUser,"galaxy");
-    res.redirect('cart');
+    res.redirect('galaxy');
     
     });
 
@@ -427,14 +427,14 @@ app.post("/cartSun",function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
     addToCart(loggedUser,"sun");
-    res.redirect('cart');
+    res.redirect('sun');
     });
 
 app.post("/cartTennis",function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
     addToCart(loggedUser,"tennis");
-    res.redirect('cart');
+    res.redirect('tennis');
 });
             
             
@@ -443,7 +443,7 @@ app.post("/cartLeaves",function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
     addToCart(loggedUser,"leaves");
-    res.redirect('cart');   
+    res.redirect('leaves');   
 });
 
 
@@ -453,7 +453,7 @@ app.post("/cartBoxing",function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
     addToCart(loggedUser,"boxing");
-    res.redirect('cart');        
+    res.redirect('boxing');        
 });
 
 
