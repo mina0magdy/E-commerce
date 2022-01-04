@@ -372,6 +372,7 @@ app.get('/tennis',function(req, res){
         //res.redirect('login');
         return;
     }
+    else
     res.render('tennis');
     });
 
