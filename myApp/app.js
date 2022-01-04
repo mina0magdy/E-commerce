@@ -158,7 +158,7 @@ async function FindItem(Item){
 async function addToCart(User,product){
     await mongoClient.connect();
     let Users = mongoClient.db('Project_dp').collection('Users');
-    let foundUser=await FindUser1(User);
+    let foundUser= FindUser1(User);//comment
     let userCart=foundUser.cart;
     if(userCart.length != 0 && userCart.includes(product)){
         res.send('<script>alert("the product is already in the card");window.location.href = "/cart" ; </script>');
