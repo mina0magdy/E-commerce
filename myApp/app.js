@@ -238,18 +238,22 @@ app.get('/',function(req, res){
 //whenever you get a request for the page 'books' excute function
 app.get('/books',function(req, res){
   
-   if(!isSinged){
-       alert("You Have to Login first");
-       res.redirect('login');
-       return;
-   }
+    if(typeof(userSession)=="undefined"){
+        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
+       // alert("You Have to Login first");
+        //res.redirect('login');
+        return;
+    }
     res.render('books');
 });
 
 app.get('/boxing',function(req, res){
-    if(!isSinged){
-        alert("You Have to Login first");
-        res.redirect('login');
+    if(typeof(userSession)=="undefined"){
+        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
+       // alert("You Have to Login first");
+        //res.redirect('login');
         return;
     }
     res.render('boxing');
@@ -257,9 +261,11 @@ app.get('/boxing',function(req, res){
 
 
 app.get('/cart',async function(req, res){
-    if(!isSinged){
-        alert("You Have to Login first");
-        res.redirect('login');
+    if(typeof(userSession)=="undefined"){
+        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
+       // alert("You Have to Login first");
+        //res.redirect('login');
         return;
     }
     userSession=req.session;
@@ -274,18 +280,22 @@ app.get('/cart',async function(req, res){
 
 
 app.get('/galaxy',function(req, res){
-    if(!isSinged){
-        alert("You Have to Login first");
-        res.redirect('login');
+    if(typeof(userSession)=="undefined"){
+        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
+       // alert("You Have to Login first");
+        //res.redirect('login');
         return;
     }
     res.render('galaxy');
 });
 
 app.get('/home',function(req, res){
-    if(!isSinged){
-        alert("You Have to Login first");
-        res.redirect('login');
+    if(typeof(userSession)=="undefined"){
+        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
+       // alert("You Have to Login first");
+        //res.redirect('login');
         return;
     }
     res.render('home');
@@ -294,18 +304,22 @@ app.get('/home',function(req, res){
 
 
 app.get('/iphone',function(req, res){
-    if(!isSinged){
-        alert("You Have to Login first");
-        res.redirect('login');
+    if(typeof(userSession)=="undefined"){
+        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
+       // alert("You Have to Login first");
+        //res.redirect('login');
         return;
     }
     res.render('iphone');
     });
 
 app.get('/leaves',function(req, res){
-    if(!isSinged){
-        alert("You Have to Login first");
-        res.redirect('login');
+    if(typeof(userSession)=="undefined"){
+        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
+       // alert("You Have to Login first");
+        //res.redirect('login');
         return;
     }
     res.render('leaves');
@@ -317,9 +331,11 @@ app.get('/login',function(req, res){
     });
 
 app.get('/phones',function(req, res){
-    if(!isSinged){
-        alert("You Have to Login first");
-        res.redirect('login');
+    if(typeof(userSession)=="undefined"){
+        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
+       // alert("You Have to Login first");
+        //res.redirect('login');
         return;
     }
     res.render('phones');
@@ -343,18 +359,19 @@ app.get('/registration',function(req, res){
 
 
 app.get('/sports',function(req, res){
-    if(!isSinged){
-        res.send('<script>alert("you are not allowed to access this page until you login"); window.location.href = "/"; </script>');
+    if(typeof(userSession)=="undefined"){
+        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
        // alert("You Have to Login first");
-       // res.redirect('login');
+        //res.redirect('login');
         return;
     }
     res.render('sports');
     });
 
 app.get('/sun',function(req, res){
-    if(!isSinged){
-        res.send('<script>alert("you are not allowed to access this page until you login"); window.location.href = "/"; </script>');
+    if(typeof(userSession)=="undefined"){
+        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
 
        // alert("You Have to Login first");
         //res.redirect('login');
@@ -366,7 +383,7 @@ app.get('/sun',function(req, res){
     
 app.get('/tennis',function(req, res){
     if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("you are not allowed to access this page until you login"); window.location.href = "/"; </script>');
+        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
 
        // alert("You Have to Login first");
         //res.redirect('login');
