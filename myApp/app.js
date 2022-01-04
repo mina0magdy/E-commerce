@@ -161,14 +161,18 @@ async function addToCart(User,product){
     let foundUser=await FindUser1(User);
     let userCart=foundUser.cart;
     if(userCart.length != 0 && userCart.includes(product)){
-        alert("the product is already in the card");
+        res.send('<script>alert("the product is already in the card"); ; </script>');
+
+        //alert("the product is already in the card");
         return;
     }
     userCart.push(product);
     console.log(userCart);
     try {
         await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':User.UserName},{$set: {'cart':userCart}});
-        alert("The Product is added to the Card");
+        res.send('<script>alert("The Product is added to the Card"); ; </script>');
+
+        //alert("The Product is added to the Card");
         await mongoClient.close();
     }
     catch(e){
@@ -183,15 +187,19 @@ app.post('/login',async function(req,res){
     let UserName = req.body.username;
     let Password = req.body.password;
     if(UserName == null || UserName == ""||Password == null || Password == ""){
-        alert("Please Enter a Valid data");
-        res.render('login',{title:'Login'});
+        res.send('<script>alert("Please Enter a Valid data"); window.location.href = "/"; </script>');
+
+        //alert("Please Enter a Valid data");
+        //res.render('login',{title:'Login'});
         return;
     }
     let User ={'UserName':UserName,'Password':Password}; 
     let ret =await FindUser(User);
     if(ret != null&&ret.length == 0){
-        alert("your userName or password is not correct");
-        res.render('login',{title:'Login'});
+        res.send('<script>alert("your userName or password is not correct"); window.location.href = "/"; </script>');
+
+        //alert("your userName or password is not correct");
+       // res.render('login',{title:'Login'});
     }
     else{
         userSession.username=UserName;
@@ -210,7 +218,9 @@ app.post('/register',async function(req,res){
     let Password = req.body.password;
     let cart=new Array;
     if(UserName == null || UserName == ""||Password == null || Password == ""){
-        alert("Please Enter a Valid data");
+        res.send('<script>alert("Please Enter a Valid data"); window.location.href = "registration"; </script>');
+
+       // alert("Please Enter a Valid data");
         return;
     }
     let User ={'UserName':UserName,'Password':Password, 'cart':cart}; 
@@ -218,12 +228,14 @@ app.post('/register',async function(req,res){
     let ret =await FindUser(testUsed);
     if(ret!= null && ret.length == 0){
         addUser(User);
-        alert("Registeration is completed");
-        res.redirect('home');  
+        //alert("Registeration is completed");
+        res.send('<script>alert("Registeration is completed"); window.location.href = "home"; </script>');
+       // res.redirect('home');  
     }
     else {
-        alert("The UserName is already exist");
-        res.render('registration'); 
+        res.send('<script>alert("The UserName is already exist"); window.location.href = "registration"; </script>');
+        //alert("The UserName is already exist");
+        //res.render('registration'); 
     }
 });
 
