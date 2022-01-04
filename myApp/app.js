@@ -243,7 +243,7 @@ app.post('/register',async function(req,res){
 
 
 app.get('/',function(req, res){
-   
+   userSession=undefined;
    res.render('login', {title: "Login"});
 });
 
