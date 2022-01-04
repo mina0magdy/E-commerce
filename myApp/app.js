@@ -419,12 +419,12 @@ await mongoClient.connect();
         //console.log("added")
 
         //alert("the product is already in the card");
-        //return;
+        return;
     }
-    userCart.push(product);
+    userCart.push("iphone");
     console.log(userCart);
     try {
-        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':User.UserName},{$set: {'cart':userCart}});
+        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
         res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
         //console.log("erroe")
         //alert("The Product is added to the Card");
@@ -441,23 +441,96 @@ await mongoClient.connect();
 app.post("/cartGalaxy", async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    await addToCart(loggedUser,"galaxy");
-    res.redirect('cart');
+    userSession=req.session;
+
+await mongoClient.connect();
+    let Users = mongoClient.db('Project_dp').collection('Users');
+    let foundUser=await FindUser1(loggedUser);
+    let userCart=foundUser.cart;
+    if(userCart.length != 0 && userCart.includes("galaxy")){
+        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
+        //console.log("added")
+
+        //alert("the product is already in the card");
+        return;
+    }
+    userCart.push("galaxy");
+    console.log(userCart);
+    try {
+        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
+        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
+        //console.log("erroe")
+        //alert("The Product is added to the Card");
+        await mongoClient.close();
+    }
+    catch(e){
+        console.error(e);
+    }
+    //await addToCart(loggedUser,"galaxy");
+    //res.redirect('cart');
     
     });
 
 app.post("/cartSun",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    await addToCart(loggedUser,"sun");
-    res.redirect('sun');
+    userSession=req.session;
+await mongoClient.connect();
+    let Users = mongoClient.db('Project_dp').collection('Users');
+    let foundUser=await FindUser1(loggedUser);
+    let userCart=foundUser.cart;
+    if(userCart.length != 0 && userCart.includes("sun")){
+        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
+        //console.log("added")
+
+        //alert("the product is already in the card");
+        return;
+    }
+    userCart.push("sun");
+    console.log(userCart);
+    try {
+        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
+        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
+        //console.log("erroe")
+        //alert("The Product is added to the Card");
+        await mongoClient.close();
+    }
+    catch(e){
+        console.error(e);
+    }
+    //await addToCart(loggedUser,"sun");
+    //res.redirect('sun');
     });
 
 app.post("/cartTennis",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    await addToCart(loggedUser,"tennis");
-    res.redirect('tennis');
+    userSession=req.session;
+await mongoClient.connect();
+    let Users = mongoClient.db('Project_dp').collection('Users');
+    let foundUser=await FindUser1(loggedUser);
+    let userCart=foundUser.cart;
+    if(userCart.length != 0 && userCart.includes("tennis")){
+        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
+        //console.log("added")
+
+        //alert("the product is already in the card");
+        return;
+    }
+    userCart.push("tennis");
+    console.log(userCart);
+    try {
+        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
+        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
+        //console.log("erroe")
+        //alert("The Product is added to the Card");
+        await mongoClient.close();
+    }
+    catch(e){
+        console.error(e);
+    }
+    //await addToCart(loggedUser,"tennis");
+    //res.redirect('tennis');
 });
             
             
@@ -465,8 +538,32 @@ app.post("/cartTennis",async function(req,res){
 app.post("/cartLeaves",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-   await addToCart(loggedUser,"leaves");
-    res.redirect('leaves');   
+    userSession=req.session;
+await mongoClient.connect();
+    let Users = mongoClient.db('Project_dp').collection('Users');
+    let foundUser=await FindUser1(loggedUser);
+    let userCart=foundUser.cart;
+    if(userCart.length != 0 && userCart.includes("leaves")){
+        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
+        //console.log("added")
+
+        //alert("the product is already in the card");
+        return;
+    }
+    userCart.push("leaves");
+    console.log(userCart);
+    try {
+        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
+        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
+        //console.log("erroe")
+        //alert("The Product is added to the Card");
+        await mongoClient.close();
+    }
+    catch(e){
+        console.error(e);
+    }
+   //await addToCart(loggedUser,"leaves");
+    //res.redirect('leaves');   
 });
 
 
@@ -475,8 +572,32 @@ app.post("/cartLeaves",async function(req,res){
 app.post("/cartBoxing",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    await addToCart(loggedUser,"boxing");
-    res.redirect('boxing');        
+    userSession=req.session;
+await mongoClient.connect();
+    let Users = mongoClient.db('Project_dp').collection('Users');
+    let foundUser=await FindUser1(loggedUser);
+    let userCart=foundUser.cart;
+    if(userCart.length != 0 && userCart.includes("boxing")){
+        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
+        //console.log("added")
+
+        //alert("the product is already in the card");
+        return;
+    }
+    userCart.push("boxing");
+    console.log(userCart);
+    try {
+        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
+        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
+        //console.log("erroe")
+        //alert("The Product is added to the Card");
+        await mongoClient.close();
+    }
+    catch(e){
+        console.error(e);
+    }
+    //await addToCart(loggedUser,"boxing");
+    //res.redirect('boxing');        
 });
 
 
