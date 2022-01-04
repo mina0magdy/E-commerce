@@ -165,7 +165,7 @@ async function addToCart(User,product){
         //console.log("added")
 
         //alert("the product is already in the card");
-        return;
+       // return;
     }
     userCart.push(product);
     console.log(userCart);
@@ -316,7 +316,7 @@ app.get('/home',function(req, res){
     });
 
 
-app.get('/iphone',async function(req, res){
+app.get('/iphone',function(req, res){
     if(typeof(userSession)=="undefined"){
         res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
 
@@ -325,32 +325,7 @@ app.get('/iphone',async function(req, res){
         return;
     }
     
-    let foundUser=await FindUser1(User);
-    let userCart=foundUser.cart;
-    if(userCart.length != 0 && userCart.includes(product)){
-        res.send('<script>alert("the product is already in the card");window.location.href = "/cart" ; </script>');
-        //console.log("added")
-
-        //alert("the product is already in the card");
-        return;
-    }
-    userCart.push(product);
-    //console.log(userCart);
-    try {
-        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':User.UserName},{$set: {'cart':userCart}});
-        res.send('<script>alert("The Product is added to the Card");window.location.href = "/cart" ; </script>');
-        //console.log("erroe")
-        //alert("The Product is added to the Card");
-        await mongoClient.close();
-    }
-    catch(e){
-        console.error(e);
-    }
-
-
-
-
-    //res.render('iphone');
+    res.render('iphone');
     });
 
 app.get('/leaves',function(req, res){
