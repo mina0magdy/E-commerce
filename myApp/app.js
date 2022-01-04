@@ -10,7 +10,8 @@ app.use(session({secret:'secret'}));
 var alert = require('alert');
 const { Script } = require('vm');
 const { Console } = require('console');
-var isSinged;
+
+var isSinged = false;
 
 
 // view engine setup
@@ -22,7 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-var userSession = undefined;
+var userSession;
 
 //// login bage
 
@@ -161,7 +162,7 @@ async function addToCart(User,product){
     let foundUser=await FindUser1(User);
     let userCart=foundUser.cart;
     if(userCart.length != 0 && userCart.includes(product)){
-        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
+        res.send('<script>alert("the product is already in the card"); window.location.href = "/cart" ; </script>');
         //console.log("added")
 
         //alert("the product is already in the card");
@@ -183,8 +184,8 @@ async function addToCart(User,product){
 }
 
 app.post('/login',async function(req,res){
-    //userSession=req.session;
-    //isSinged=false;
+    userSession=req.session;
+    isSinged=false;
     let UserName = req.body.username;
     let Password = req.body.password;
     if(UserName == null || UserName == ""||Password == null || Password == ""){
@@ -201,10 +202,8 @@ app.post('/login',async function(req,res){
 
         //alert("your userName or password is not correct");
        // res.render('login',{title:'Login'});
-       return;
     }
     else{
-        userSession=req.session;
         userSession.username=UserName;
         userSession.pass=Password;
         isSinged = true;
@@ -244,8 +243,7 @@ app.post('/register',async function(req,res){
 
 
 app.get('/',function(req, res){
-   userSession=undefined;
-   isSinged = false;
+   
    res.render('login', {title: "Login"});
 });
 
@@ -254,91 +252,99 @@ app.get('/',function(req, res){
 //whenever you get a request for the page 'books' excute function
 app.get('/books',function(req, res){
   
-    if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+    if(req.session.username){
+        res.render('books');
+        return;
+    }
+    res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
 
        // alert("You Have to Login first");
         //res.redirect('login');
         return;
-    }
-    res.render('books');
 });
 
 app.get('/boxing',function(req, res){
-    if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
-
-       // alert("You Have to Login first");
-        //res.redirect('login');
+    if(req.session.username){
+        res.render('boxing');
         return;
+        
     }
-    res.render('boxing');
+    res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+    return;
 });
 
 
 app.get('/cart',async function(req, res){
-    if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+    if(req.session.username){
+        userSession=req.session;
+    let foundUser=await FindUserByUsername(userSession.username);
+    let userCart=foundUser.cart;
+   
+    res.render('cart',{myCart:userCart});
+    return;
+    }
+    res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
 
        // alert("You Have to Login first");
         //res.redirect('login');
         return;
-    }
-    userSession=req.session;
-    let foundUser=await FindUserByUsername(userSession.username);
-    let userCart=foundUser.cart;
-    console.log(userCart);
         
  
  
-    res.render('cart',{myCart:userCart});
+    
 });
 
 
 app.get('/galaxy',function(req, res){
-    if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+    if(req.session.username){
+        res.render('galaxy');
 
        // alert("You Have to Login first");
         //res.redirect('login');
         return;
     }
-    res.render('galaxy');
+    res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
 });
 
 app.get('/home',function(req, res){
-    if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+    if(req.session.username){
+        res.render('home');
+        console.log(userSession.username);
 
        // alert("You Have to Login first");
         //res.redirect('login');
         return;
     }
-    res.render('home');
-    console.log(userSession.username);
+    res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
     });
 
 
 app.get('/iphone',function(req, res){
-    if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+    if(req.session.username){
+    res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
 
        // alert("You Have to Login first");
         //res.redirect('login');
         return;
     }
     res.render('iphone');
+
     });
 
 app.get('/leaves',function(req, res){
-    if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+    if(req.session.username){
+    res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
 
        // alert("You Have to Login first");
         //res.redirect('login');
         return;
     }
     res.render('leaves');
+
     });  
 
 
@@ -347,14 +353,17 @@ app.get('/login',function(req, res){
     });
 
 app.get('/phones',function(req, res){
-    if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+    if(req.session.username){
+    res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
+
 
        // alert("You Have to Login first");
         //res.redirect('login');
         return;
     }
     res.render('phones');
+
     });
 
 
@@ -375,165 +384,72 @@ app.get('/registration',function(req, res){
 
 
 app.get('/sports',function(req, res){
-    if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+    if(req.session.username){
+        res.render('sports');
 
        // alert("You Have to Login first");
         //res.redirect('login');
         return;
     }
-    res.render('sports');
+    res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
     });
 
 app.get('/sun',function(req, res){
-    if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+    if(req.session.username){
+        res.render('sun');
 
        // alert("You Have to Login first");
         //res.redirect('login');
         return;
     }
-    res.render('sun');
+    res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+
     });
     
     
 app.get('/tennis',function(req, res){
-    if(typeof(userSession)=="undefined"){
-        res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
+    if(req.session.username){
+        res.render('tennis');
 
        // alert("You Have to Login first");
         //res.redirect('login');
         return;
     }
+    res.send('<script>alert("You Have to Login first"); window.location.href = "/"; </script>');
    
-    res.render('tennis');
+    
     });
 
 
 app.post("/cartIphone", async function(req,res){
 userSession=req.session;
 let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-await mongoClient.connect();
-    let Users = mongoClient.db('Project_dp').collection('Users');
-    let foundUser=await FindUser1(loggedUser);
-    let userCart=foundUser.cart;
-    if(userCart.length != 0 && userCart.includes("iphone")){
-        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
-        //console.log("added")
-
-        //alert("the product is already in the card");
-        return;
-    }
-    userCart.push("iphone");
-    console.log(userCart);
-    try {
-        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
-        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
-        //console.log("erroe")
-        //alert("The Product is added to the Card");
-        await mongoClient.close();
-    }
-    catch(e){
-        console.error(e);
-    }
-//await addToCart(loggedUser,"iphone");
-//res.redirect('cart');
+await addToCart(loggedUser,"iphone");
+res.redirect('cart');
 
 });
 
 app.post("/cartGalaxy", async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    userSession=req.session;
-
-await mongoClient.connect();
-    let Users = mongoClient.db('Project_dp').collection('Users');
-    let foundUser=await FindUser1(loggedUser);
-    let userCart=foundUser.cart;
-    if(userCart.length != 0 && userCart.includes("galaxy")){
-        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
-        //console.log("added")
-
-        //alert("the product is already in the card");
-        return;
-    }
-    userCart.push("galaxy");
-    console.log(userCart);
-    try {
-        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
-        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
-        //console.log("erroe")
-        //alert("The Product is added to the Card");
-        await mongoClient.close();
-    }
-    catch(e){
-        console.error(e);
-    }
-    //await addToCart(loggedUser,"galaxy");
-    //res.redirect('cart');
+    await addToCart(loggedUser,"galaxy");
+    res.redirect('cart');
     
     });
 
 app.post("/cartSun",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    userSession=req.session;
-await mongoClient.connect();
-    let Users = mongoClient.db('Project_dp').collection('Users');
-    let foundUser=await FindUser1(loggedUser);
-    let userCart=foundUser.cart;
-    if(userCart.length != 0 && userCart.includes("sun")){
-        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
-        //console.log("added")
-
-        //alert("the product is already in the card");
-        return;
-    }
-    userCart.push("sun");
-    console.log(userCart);
-    try {
-        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
-        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
-        //console.log("erroe")
-        //alert("The Product is added to the Card");
-        await mongoClient.close();
-    }
-    catch(e){
-        console.error(e);
-    }
-    //await addToCart(loggedUser,"sun");
-    //res.redirect('sun');
+    await addToCart(loggedUser,"sun");
+    res.redirect('sun');
     });
 
 app.post("/cartTennis",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    userSession=req.session;
-await mongoClient.connect();
-    let Users = mongoClient.db('Project_dp').collection('Users');
-    let foundUser=await FindUser1(loggedUser);
-    let userCart=foundUser.cart;
-    if(userCart.length != 0 && userCart.includes("tennis")){
-        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
-        //console.log("added")
-
-        //alert("the product is already in the card");
-        return;
-    }
-    userCart.push("tennis");
-    console.log(userCart);
-    try {
-        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
-        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
-        //console.log("erroe")
-        //alert("The Product is added to the Card");
-        await mongoClient.close();
-    }
-    catch(e){
-        console.error(e);
-    }
-    //await addToCart(loggedUser,"tennis");
-    //res.redirect('tennis');
+    await addToCart(loggedUser,"tennis");
+    res.redirect('tennis');
 });
             
             
@@ -541,32 +457,8 @@ await mongoClient.connect();
 app.post("/cartLeaves",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    userSession=req.session;
-await mongoClient.connect();
-    let Users = mongoClient.db('Project_dp').collection('Users');
-    let foundUser=await FindUser1(loggedUser);
-    let userCart=foundUser.cart;
-    if(userCart.length != 0 && userCart.includes("leaves")){
-        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
-        //console.log("added")
-
-        //alert("the product is already in the card");
-        return;
-    }
-    userCart.push("leaves");
-    console.log(userCart);
-    try {
-        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
-        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
-        //console.log("erroe")
-        //alert("The Product is added to the Card");
-        await mongoClient.close();
-    }
-    catch(e){
-        console.error(e);
-    }
-   //await addToCart(loggedUser,"leaves");
-    //res.redirect('leaves');   
+   await addToCart(loggedUser,"leaves");
+    res.redirect('leaves');   
 });
 
 
@@ -575,32 +467,8 @@ await mongoClient.connect();
 app.post("/cartBoxing",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    userSession=req.session;
-await mongoClient.connect();
-    let Users = mongoClient.db('Project_dp').collection('Users');
-    let foundUser=await FindUser1(loggedUser);
-    let userCart=foundUser.cart;
-    if(userCart.length != 0 && userCart.includes("boxing")){
-        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
-        //console.log("added")
-
-        //alert("the product is already in the card");
-        return;
-    }
-    userCart.push("boxing");
-    console.log(userCart);
-    try {
-        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userSession.username},{$set: {'cart':userCart}});
-        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
-        //console.log("erroe")
-        //alert("The Product is added to the Card");
-        await mongoClient.close();
-    }
-    catch(e){
-        console.error(e);
-    }
-    //await addToCart(loggedUser,"boxing");
-    //res.redirect('boxing');        
+    await addToCart(loggedUser,"boxing");
+    res.redirect('boxing');        
 });
 
 
@@ -619,7 +487,3 @@ else{
     })
 }
 ///
-
-  
-
-
