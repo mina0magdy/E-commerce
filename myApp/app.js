@@ -203,6 +203,7 @@ app.post('/login',async function(req,res){
        // res.render('login',{title:'Login'});
     }
     else{
+        userSession=req.session;
         userSession.username=UserName;
         userSession.pass=Password;
         isSinged = true;
