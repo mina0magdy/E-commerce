@@ -161,7 +161,7 @@ async function addToCart(User,product){
     let foundUser=await FindUser1(User);
     let userCart=foundUser.cart;
     if(userCart.length != 0 && userCart.includes(product)){
-        res.send('<script>alert("the product is already in the card"); ; </script>');
+        res.send('<script>alert("the product is already in the card");window.location.href = "cart" ; </script>');
 
         //alert("the product is already in the card");
         return;
@@ -170,7 +170,7 @@ async function addToCart(User,product){
     console.log(userCart);
     try {
         await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':User.UserName},{$set: {'cart':userCart}});
-        res.send('<script>alert("The Product is added to the Card"); ; </script>');
+        res.send('<script>alert("The Product is added to the Card");window.location.href = "cart" ; </script>');
 
         //alert("The Product is added to the Card");
         await mongoClient.close();
