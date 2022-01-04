@@ -419,7 +419,7 @@ await mongoClient.connect();
         //console.log("added")
 
         //alert("the product is already in the card");
-        return;
+        //return;
     }
     userCart.push(product);
     console.log(userCart);
@@ -434,7 +434,7 @@ await mongoClient.connect();
         console.error(e);
     }
 //await addToCart(loggedUser,"iphone");
-res.redirect('cart');
+//res.redirect('cart');
 
 });
 
