@@ -201,6 +201,7 @@ app.post('/login',async function(req,res){
 
         //alert("your userName or password is not correct");
        // res.render('login',{title:'Login'});
+       return;
     }
     else{
         userSession=req.session;
