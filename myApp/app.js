@@ -411,7 +411,7 @@ app.post("/cartIphone",function(req,res){
 userSession=req.session;
 let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
 addToCart(loggedUser,"iphone");
-//res.redirect('iphone');
+res.redirect('iphone');
 
 });
 
