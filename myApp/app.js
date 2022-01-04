@@ -161,7 +161,7 @@ async function addToCart(User,product){
     let foundUser=await FindUser1(User);
     let userCart=foundUser.cart;
     if(userCart.length != 0 && userCart.includes(product)){
-        res.send('<script>alert("the product is already in the card");window.location.href = "cart" ; </script>');
+        res.send('<script>alert("the product is already in the card");window.location.href = "/cart" ; </script>');
         console.log("added")
 
         //alert("the product is already in the card");
@@ -219,7 +219,7 @@ app.post('/register',async function(req,res){
     let Password = req.body.password;
     let cart=new Array;
     if(UserName == null || UserName == ""||Password == null || Password == ""){
-        res.send('<script>alert("Please Enter a Valid data"); window.location.href = "registration"; </script>');
+        res.send('<script>alert("Please Enter a Valid data"); window.location.href = "/registration"; </script>');
 
        // alert("Please Enter a Valid data");
         return;
@@ -230,11 +230,11 @@ app.post('/register',async function(req,res){
     if(ret!= null && ret.length == 0){
         addUser(User);
         //alert("Registeration is completed");
-        res.send('<script>alert("Registeration is completed"); window.location.href = "home"; </script>');
+        res.send('<script>alert("Registeration is completed"); window.location.href = "/home"; </script>');
        // res.redirect('home');  
     }
     else {
-        res.send('<script>alert("The UserName is already exist"); window.location.href = "registration"; </script>');
+        res.send('<script>alert("The UserName is already exist"); window.location.href = "/registration"; </script>');
         //alert("The UserName is already exist");
         //res.render('registration'); 
     }
