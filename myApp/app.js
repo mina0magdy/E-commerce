@@ -182,6 +182,11 @@ app.post('/login',async function(req,res){
     
     let UserName = req.body.username;
     let Password = req.body.password;
+    if(UserName == null || UserName == ""||Password == null || Password == ""){
+        alert("Please Enter a Valid data");
+        res.render('login',{title:'Login'});
+        return;
+    }
     let User ={'UserName':UserName,'Password':Password}; 
     let ret =await FindUser(User);
     if(ret != null&&ret.length == 0){
