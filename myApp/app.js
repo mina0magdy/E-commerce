@@ -162,7 +162,7 @@ async function addToCart(User,product){
     let userCart=foundUser.cart;
     if(userCart.length != 0 && userCart.includes(product)){
         res.send('<script>alert("the product is already in the card");window.location.href = "/cart" ; </script>');
-        console.log("added")
+        //console.log("added")
 
         //alert("the product is already in the card");
         return;
@@ -419,7 +419,7 @@ app.post("/cartGalaxy",function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
     addToCart(loggedUser,"galaxy");
-    res.redirect('galaxy');
+    //res.redirect('galaxy');
     
     });
 
@@ -427,14 +427,14 @@ app.post("/cartSun",function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
     addToCart(loggedUser,"sun");
-    res.redirect('sun');
+   // res.redirect('sun');
     });
 
 app.post("/cartTennis",function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
     addToCart(loggedUser,"tennis");
-    res.redirect('tennis');
+   // res.redirect('tennis');
 });
             
             
@@ -443,7 +443,7 @@ app.post("/cartLeaves",function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
     addToCart(loggedUser,"leaves");
-    res.redirect('leaves');   
+   // res.redirect('leaves');   
 });
 
 
@@ -453,7 +453,7 @@ app.post("/cartBoxing",function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
     addToCart(loggedUser,"boxing");
-    res.redirect('boxing');        
+   // res.redirect('boxing');        
 });
 
 
