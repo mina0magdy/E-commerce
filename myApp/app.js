@@ -230,7 +230,7 @@ app.post('/register',async function(req,res){
     if(ret!= null && ret.length == 0){
         addUser(User);
         //alert("Registeration is completed");
-        res.send('<script>alert("Registeration is completed"); window.location.href = "/home"; </script>');
+        res.send('<script>alert("Registeration is completed"); window.location.href = "/login"; </script>');
        // res.redirect('home');  
     }
     else {
@@ -410,7 +410,30 @@ app.get('/tennis',function(req, res){
 app.post("/cartIphone", async function(req,res){
 userSession=req.session;
 let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-await addToCart(loggedUser,"iphone");
+await mongoClient.connect();
+    let Users = mongoClient.db('Project_dp').collection('Users');
+    let foundUser=await FindUser1(loggedUser);
+    let userCart=foundUser.cart;
+    if(userCart.length != 0 && userCart.includes("iphone")){
+        res.send('<script>alert("the product is already in the card"); window.location.href = "cart" ; </script>');
+        //console.log("added")
+
+        //alert("the product is already in the card");
+        return;
+    }
+    userCart.push(product);
+    console.log(userCart);
+    try {
+        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':User.UserName},{$set: {'cart':userCart}});
+        res.send('<script>alert("The Product is added to the Card"); window.location.href = "/cart" ; </script>');
+        //console.log("erroe")
+        //alert("The Product is added to the Card");
+        await mongoClient.close();
+    }
+    catch(e){
+        console.error(e);
+    }
+//await addToCart(loggedUser,"iphone");
 res.redirect('cart');
 
 });
