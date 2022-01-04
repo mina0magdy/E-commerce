@@ -365,14 +365,14 @@ app.get('/sun',function(req, res){
     
     
 app.get('/tennis',function(req, res){
-    if(!isSinged){
+    if(typeof(userSession)=="undefined"){
         res.send('<script>alert("you are not allowed to access this page until you login"); window.location.href = "/"; </script>');
 
        // alert("You Have to Login first");
         //res.redirect('login');
         return;
     }
-    else
+   
     res.render('tennis');
     });
 
