@@ -165,7 +165,7 @@ async function addToCart(User,product){
         //console.log("added")
 
         //alert("the product is already in the card");
-       // return;
+        return;
     }
     userCart.push(product);
     console.log(userCart);
