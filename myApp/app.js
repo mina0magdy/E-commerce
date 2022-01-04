@@ -9,7 +9,8 @@ const session=require("express-session");
 app.use(session({secret:'secret'}));
 var alert = require('alert');
 const { Script } = require('vm');
-
+const { Console } = require('console');
+var isSinged = false;
 
 
 // view engine setup
@@ -68,17 +69,14 @@ async function FindUser(User){
 
 async function FindUser1(User){
     try{
-    await mongoClient.connect();
     let Users = mongoClient.db('Project_dp').collection('Users');
         try{
-            return await Users.findOne(User);
-            
+            let ret = await Users.findOne(User);
+            return ret;
         }
         catch(e){
             console.log('error in find User');
             return null;
-        }finally{
-            await mongoClient.close();
         }
    }
    catch(e){
@@ -92,8 +90,8 @@ async function FindUserByUsername(username){
     await mongoClient.connect();
     let Users = mongoClient.db('Project_dp').collection('Users');
         try{
-            return await Users.findOne({'UserName':username});
-            
+            let ret =await Users.findOne({'UserName':username});
+            return ret;
         }
         catch(e){
             console.log('error in find User');
@@ -130,13 +128,13 @@ async function addItems(){
 }
 //// first call the function addItem and we let it be called only once then we comment it;
 //addItems();
-
+//console.log("Atems is added");
 async function FindItem(Item){
     try{
     await mongoClient.connect();
     let Items = mongoClient.db('Project_dp').collection('Items');
         try{
-            let ret=await Items.find( { $text: { $search: Item } } ).toArray();
+            let ret=await Items.find({name:{'$regex' : Item, '$options' : 'i'}}).toArray();
             return ret;
         }
         catch(e){
@@ -154,9 +152,7 @@ async function FindItem(Item){
 }
 
 
-async function updateByUsername(mongoClient,userName,updatedListing){
-await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':userName},{$set: updatedListing});
-}
+
 
 
 async function addToCart(User,product){
@@ -164,33 +160,39 @@ async function addToCart(User,product){
     let Users = mongoClient.db('Project_dp').collection('Users');
     let foundUser=await FindUser1(User);
     let userCart=foundUser.cart;
+    if(userCart.length != 0 && userCart.includes(product)){
+        alert("the product is already in the card");
+        return;
+    }
     userCart.push(product);
     console.log(userCart);
     try {
-        updateByUsername(mongoClient,User.UserName,{'cart':userCart})
+        await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':User.UserName},{$set: {'cart':userCart}});
+        alert("The Product is added to the Card");
+        await mongoClient.close();
     }
     catch(e){
         console.error(e);
     }
-
-
+   
 }
 
 app.post('/login',async function(req,res){
     userSession=req.session;
+    
     let UserName = req.body.username;
     let Password = req.body.password;
     let User ={'UserName':UserName,'Password':Password}; 
     let ret =await FindUser(User);
-    if(ret.length == 0){
+    if(ret != null&&ret.length == 0){
         alert("your userName or password is not correct");
         res.render('login',{title:'Login'});
     }
     else{
         userSession.username=UserName;
         userSession.pass=Password;
+        isSinged = true;
         res.redirect('home');
-
     }
          
 
@@ -202,11 +204,16 @@ app.post('/register',async function(req,res){
     let UserName = req.body.username;
     let Password = req.body.password;
     let cart=new Array;
+    if(UserName == null || UserName == ""||Password == null || Password == ""){
+        alert("Please Enter a Valid data");
+        return;
+    }
     let User ={'UserName':UserName,'Password':Password, 'cart':cart}; 
     let testUsed = {'UserName':UserName};
     let ret =await FindUser(testUsed);
     if(ret!= null && ret.length == 0){
         addUser(User);
+        alert("Registeration is completed");
         res.redirect('login');  
     }
     else {
@@ -217,6 +224,7 @@ app.post('/register',async function(req,res){
 
 
 app.get('/',function(req, res){
+   
    res.render('login', {title: "Login"});
 });
 
@@ -224,15 +232,31 @@ app.get('/',function(req, res){
 
 //whenever you get a request for the page 'books' excute function
 app.get('/books',function(req, res){
+  
+   if(!isSinged){
+       alert("You Have to Login first");
+       res.redirect('login');
+       return;
+   }
     res.render('books');
 });
 
 app.get('/boxing',function(req, res){
+    if(!isSinged){
+        alert("You Have to Login first");
+        res.redirect('login');
+        return;
+    }
     res.render('boxing');
 });
 
 
 app.get('/cart',async function(req, res){
+    if(!isSinged){
+        alert("You Have to Login first");
+        res.redirect('login');
+        return;
+    }
     userSession=req.session;
     let foundUser=await FindUserByUsername(userSession.username);
     let userCart=foundUser.cart;
@@ -245,20 +269,40 @@ app.get('/cart',async function(req, res){
 
 
 app.get('/galaxy',function(req, res){
+    if(!isSinged){
+        alert("You Have to Login first");
+        res.redirect('login');
+        return;
+    }
     res.render('galaxy');
 });
 
 app.get('/home',function(req, res){
+    if(!isSinged){
+        alert("You Have to Login first");
+        res.redirect('login');
+        return;
+    }
     res.render('home');
     console.log(userSession.username);
     });
 
 
 app.get('/iphone',function(req, res){
+    if(!isSinged){
+        alert("You Have to Login first");
+        res.redirect('login');
+        return;
+    }
     res.render('iphone');
     });
 
 app.get('/leaves',function(req, res){
+    if(!isSinged){
+        alert("You Have to Login first");
+        res.redirect('login');
+        return;
+    }
     res.render('leaves');
     });  
 
@@ -268,16 +312,22 @@ app.get('/login',function(req, res){
     });
 
 app.get('/phones',function(req, res){
+    if(!isSinged){
+        alert("You Have to Login first");
+        res.redirect('login');
+        return;
+    }
     res.render('phones');
     });
 
 
 app.get('/registration',function(req, res){
+
     res.render('registration');
     });
 
 
-    pp.post('/search',async function(req,res){
+    app.post('/search',async function(req,res){
         var x=await FindItem(req.body.Search);
         if(x==null){
             alert("You don't have a connection");
@@ -288,15 +338,30 @@ app.get('/registration',function(req, res){
 
 
 app.get('/sports',function(req, res){
+    if(!isSinged){
+        alert("You Have to Login first");
+        res.redirect('login');
+        return;
+    }
     res.render('sports');
     });
 
 app.get('/sun',function(req, res){
+    if(!isSinged){
+        alert("You Have to Login first");
+        res.redirect('login');
+        return;
+    }
     res.render('sun');
     });
     
     
 app.get('/tennis',function(req, res){
+    if(!isSinged){
+        alert("You Have to Login first");
+        res.redirect('login');
+        return;
+    }
     res.render('tennis');
     });
 
@@ -353,7 +418,16 @@ app.post("/cartBoxing",function(req,res){
 
 
 
-app.listen(3000);
+if (process.env.PORT){
+    app.listen(process.env.PORT,function(){
+        console.log('Server started')
+    })
+}
+else{
+    app.listen(3000,process.env.PORT,function(){
+        console.log('Server on port 30000')
+    })
+}
 
   
 
