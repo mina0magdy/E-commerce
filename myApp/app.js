@@ -171,7 +171,7 @@ async function addToCart(User,product){
     console.log(userCart);
     try {
         await mongoClient.db('Project_dp').collection('Users').updateOne({'UserName':User.UserName},{$set: {'cart':userCart}});
-        //res.send('<script>alert("The Product is added to the Card");window.location.href = "cart" ; </script>');
+        res.send('<script>alert("The Product is added to the Card");window.location.href = "/cart" ; </script>');
         //console.log("erroe")
         //alert("The Product is added to the Card");
         await mongoClient.close();
@@ -411,7 +411,7 @@ app.post("/cartIphone",function(req,res){
 userSession=req.session;
 let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
 addToCart(loggedUser,"iphone");
-res.redirect('cart');
+//res.redirect('cart');
 
 });
 
