@@ -415,44 +415,44 @@ res.redirect('cart');
 
 });
 
-app.post("/cartGalaxy",function(req,res){
+app.post("/cartGalaxy", async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    addToCart(loggedUser,"galaxy");
+    await addToCart(loggedUser,"galaxy");
     res.redirect('cart');
     
     });
 
-app.post("/cartSun",function(req,res){
+app.post("/cartSun",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    addToCart(loggedUser,"sun");
+    await addToCart(loggedUser,"sun");
     res.redirect('sun');
     });
 
-app.post("/cartTennis",function(req,res){
+app.post("/cartTennis",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    addToCart(loggedUser,"tennis");
+    await addToCart(loggedUser,"tennis");
     res.redirect('tennis');
 });
             
             
 
-app.post("/cartLeaves",function(req,res){
+app.post("/cartLeaves",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    addToCart(loggedUser,"leaves");
+   await addToCart(loggedUser,"leaves");
     res.redirect('leaves');   
 });
 
 
 
 
-app.post("/cartBoxing",function(req,res){
+app.post("/cartBoxing",async function(req,res){
     userSession=req.session;
     let loggedUser={"UserName":userSession.username,"Password":userSession.pass}
-    addToCart(loggedUser,"boxing");
+    await addToCart(loggedUser,"boxing");
     res.redirect('boxing');        
 });
 
